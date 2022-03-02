@@ -8,5 +8,6 @@ namespace SistemaControleFilasCovid
         public int Pressure { get; set; }
         public int Saturation { get; set; }
         public DateTime OnsetSymptoms { get; set; }
+        public int Count { get; set; }
     }
 }
