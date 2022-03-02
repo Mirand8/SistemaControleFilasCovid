@@ -6,7 +6,7 @@ namespace SistemaControleFilasCovid
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
         }
     }
 }
