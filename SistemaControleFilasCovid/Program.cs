@@ -28,7 +28,7 @@ namespace SistemaControleFilasCovid
 
                     case 2:
                         Console.WriteLine("==== RECEPCAO ====");
-                        pacientFlowControl.Reception();
+                        pacientFlowControl.Register();
                         Console.ReadKey();
                         Console.Clear();
                         break;

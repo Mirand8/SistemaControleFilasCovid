@@ -28,12 +28,11 @@ namespace SistemaControleFilasCovid
             }
         }
 
-        public Pacient PullFirst()
+        public Pacient GetFirst()
         {
             if (!IsEmpty())
             {
                 Pacient first = Head;
-                Pop();
                 return first;
             }
             else return null;
@@ -43,21 +42,27 @@ namespace SistemaControleFilasCovid
         {
             Console.Write("FILA DE ESPERA => ");
             Console.Write("[ ");
-            Pacient aux = Head;
-            do
+            if (!IsEmpty())
             {
-                if (aux.Next == null)
+                Pacient aux = Head;
+                do
                 {
-                    Console.Write(aux.Password);
-                }
-                else
-                {
-                    Console.Write(aux.Password + ", ");
-                }
-                aux = aux.Next;
-            } while (aux != null);
-            
-            Console.Write(" ]");
+                    if (aux.Next == null)
+                    {
+                        Console.Write(aux.Password);
+                    }
+                    else
+                    {
+                        Console.Write(aux.Password + ", ");
+                    }
+                    aux = aux.Next;
+                } while (aux != null);
+                Console.WriteLine(" ]");
+            }
+            else
+            {
+                Console.WriteLine("[ vazia ]");
+            }
         }
 
         public void Pop()

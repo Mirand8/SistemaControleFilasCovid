@@ -9,6 +9,7 @@ namespace SistemaControleFilasCovid
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
+        public bool IsPreferencial => Age > 59;
         public Report Report { get; set; }
         public Pacient Next { get; set; }
 
@@ -17,22 +18,23 @@ namespace SistemaControleFilasCovid
             CPF = cpf;
             Name = name;
             BirthDate = birthDate;
-            Age = DateTime.Now.Year - BirthDate.Year;
+            int now = DateTime.Now.Year;
+            int birthYear = BirthDate.Year;
+            Age = now - birthYear;
         }
 
         public Pacient (int password)
         {
             Password = password;
-        }
-
-        public bool IsPreferencial() => Age > 59; 
+        } 
 
         public override string ToString()
         {
             return $"\n-=-=-=-=-=-=-=\n" +
                    $"CPF: {CPF}\n" +
                    $"Nome: {Name}\n" +
-                   $"Data de Nascimento: {BirthDate}\n" +
+                   $"Data de Nascimento: {BirthDate:dd/MM/yyy}\n" +
+                   $"Idade: {Age}\n" +
                    $"\n-=-=-=-=-=-=-=\n";
         }
     }
