@@ -16,4 +16,5 @@
 
 <h3> Faltou </h3>
 
-Manipular corretamente os arquivos para pegar todos os dados salvos direto dos arquivos e manipular todos os dados direto dos arquivos
+- Manipular corretamente os arquivos para pegar todos os dados salvos direto dos arquivos e manipular todos os dados direto dos arquivos
+- Opcao para trocar o caminho dos arquivos
