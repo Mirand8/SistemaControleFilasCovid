@@ -2,35 +2,35 @@
 
 namespace SistemaControleFilasCovid
 {
-    public class EntryLine
+    public class PreferencialList
     {
+
         public Pacient Head { get; set; }
         public Pacient Tail { get; set; }
+        public int Count { get; set; }
+        public bool IsEmpty => Count == 0;
 
-        public EntryLine()
+        public PreferencialList()
         {
-            Head = null; 
-            Tail = null;
+            Head = Tail = null;
+            Count = 0;
         }
 
-        public void Entry(Pacient newPacient)
+        public void Add(Pacient newPacient)
         {
+            if (IsEmpty) Head = Tail = newPacient;
 
-            if (IsEmpty())
-            {
-                Head = newPacient;
-                Tail = newPacient;
-            }
             else
             {
                 Tail.Next = newPacient;
                 Tail = newPacient;
             }
+            Count++;
         }
 
-        public Pacient GetFirst()
+        public Pacient First()
         {
-            if (!IsEmpty())
+            if (!IsEmpty)
             {
                 Pacient first = Head;
                 return first;
@@ -38,22 +38,40 @@ namespace SistemaControleFilasCovid
             else return null;
         }
 
+        public void RemoveFirst()
+        {
+            if (!IsEmpty)
+            {
+                if (Head.Next == null)
+                {
+                    Tail = null;
+                }
+                Head = Head.Next;
+            }
+            Count--;
+        }
+
+        public void Remove(Pacient pacient)
+        {
+            
+        }
+
         public void Show()
         {
-            Console.Write("FILA DE ESPERA => ");
+            Console.Write("FILA PREFERENCIAL => ");
             Console.Write("[ ");
-            if (!IsEmpty())
+            if (!IsEmpty)
             {
                 Pacient aux = Head;
                 do
                 {
                     if (aux.Next == null)
                     {
-                        Console.Write(aux.Password);
+                        Console.Write(aux.Name + " Idade: " + aux.Age);
                     }
                     else
                     {
-                        Console.Write(aux.Password + ", ");
+                        Console.Write(aux.Name + " Idade: " + aux.Age + ", ");
                     }
                     aux = aux.Next;
                 } while (aux != null);
@@ -64,25 +82,5 @@ namespace SistemaControleFilasCovid
                 Console.WriteLine("[ vazia ]");
             }
         }
-
-        public void Pop()
-        {
-            if (!IsEmpty())
-            {
-                if (Head.Next == null)
-                {
-                    Tail = null;
-                }
-                Head = Head.Next;
-            }
-        }
-
-        public void Out(int password)
-        {
-            
-        }
-
-        public bool IsEmpty() => Head == null && Tail == null;
-
     }
 }

@@ -2,22 +2,33 @@
 
 namespace SistemaControleFilasCovid
 {
-    public class CommumLine
+    public class CommonList
     {
         public Pacient Head { get; set; }
-        public Pacient Tail{ get; set; }
+        public Pacient Tail { get; set; }
         public int Count { get; set; }
+        public bool IsEmpty => Count == 0;
 
-        public CommumLine()
+        public CommonList()
         {
             Head = null;
             Tail = null;
             Count = 0;
         }
 
-        public void Insert(Pacient newPacient)
+        public Pacient First()
         {
-            if (IsEmpty()) Head = Tail = newPacient;
+            if (!IsEmpty)
+            {
+                Pacient first = Head;
+                return first;
+            }
+            else return null;
+        }
+
+        public void Add(Pacient newPacient)
+        {
+            if (IsEmpty) Head = Tail = newPacient;
 
             else
             {
@@ -27,21 +38,29 @@ namespace SistemaControleFilasCovid
             Count++;
         }
 
-        public Pacient GetFirst()
+        public void RemoveFirst()
         {
-            if (!IsEmpty())
+            if (!IsEmpty)
             {
-                Pacient first = Head;
-                return first;
+                if (Head.Next == null)
+                {
+                    Tail = null;
+                }
+                Head = Head.Next;
             }
-            else return null;
+            Count--;
+        }
+
+        public void Remove(Pacient pacient)
+        {
+
         }
 
         public void Show()
         {
             Console.Write("FILA DE COMUM => ");
             Console.Write("[ ");
-            if (!IsEmpty())
+            if (!IsEmpty)
             {
                 Pacient aux = Head;
                 do
@@ -63,7 +82,5 @@ namespace SistemaControleFilasCovid
                 Console.WriteLine("[ vazia ]");
             }
         }
-
-        public bool IsEmpty() => Head == null && Tail == null;
     }
 }

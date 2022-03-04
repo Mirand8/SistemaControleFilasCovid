@@ -8,159 +8,190 @@ namespace SistemaControleFilasCovid
 {
     public class PacientFlowControl
     {
-        public EntryLine EntryLine { get; set; }
         public int GenPassword { get; set; }
-        public PreferencialLine PreferentialLine { get; set; }
-        public CommumLine CommumLine { get; set; }
+        public PreferencialList Preferentials { get; set; }
+        public CommonList Commons { get; set; }
+        public List<Pacient> Emergencies { get; set; }
+        public int PrefCount { get; set; }
+        public ArchiveController ArchiveController { get; set; }
+        public BedsFlowControl BedsFlowControl { get; set; }
 
         public PacientFlowControl()
         {
             GenPassword = 0;
-            EntryLine = new EntryLine();
-            PreferentialLine = new PreferencialLine();
-            CommumLine = new CommumLine();
+            Preferentials = new ();
+            Commons = new();
+            Emergencies = new();
+            BedsFlowControl = new ();
         }
 
-        public void GetInFirstLine()
+        public void CallNext() => GenPassword++;
+
+        public void Register(bool isEmergency)
         {
-            Pacient newPacient = new (GenPassword);
+            CallNext();
+            Console.WriteLine("Senha atual: " + GenPassword);
+            Console.WriteLine("\nREGISTRO: ");
+            Console.Write("CPF: ");
+            int cpf = int.Parse(Console.ReadLine());
 
-            ++GenPassword;
+            Console.Write("Nome: ");
+            string name = Console.ReadLine();
 
-            EntryLine.Entry(newPacient);
-            newPacient.Password = GenPassword;
-        }
-
-        public void Register()
-        {
-            Pacient next;
-            EntryLine.Show();
-            if (!EntryLine.IsEmpty())
-            {
-                next = EntryLine.GetFirst();
-                Console.WriteLine($"PACIENTE SENHA: {next.Password}");
-
-                int cpf;
-                string name;
-                DateTime birthDate;
-
-                Console.WriteLine("\nREGISTRO: ");
-                Console.Write("CPF: ");
-                cpf = int.Parse(Console.ReadLine());
-
-                Console.Write("Nome: ");
-                name = Console.ReadLine();
-
-                Console.Write("Data de Nascimento=> ");
-                Console.Write("Dia: ");
-                int day = int.Parse(Console.ReadLine());
-                Console.Write("Mes: ");
-                int mounth = int.Parse(Console.ReadLine());
-                Console.Write("Ano: ");
-                int year = int.Parse(Console.ReadLine());
-                birthDate = new DateTime(year, mounth, day);
-
-                next = RegisterPacient(next, cpf, name, birthDate, DateTime.Now.Year - year);
-                Console.WriteLine($"Novo paciente cadastrado: {next}");
-                EntryLine.Pop();
-            }
-            else
-            {
-                next = null;
-                Console.WriteLine("A fila de espera esta vazia!!");
-                Console.ReadKey();
-            }
-
-            if (next != null)
-            {
-                if (next.IsPreferencial) PreferentialLine.Insert(next);
-
-                else CommumLine.Insert(next);
-            }
-        }
-
-        public void Sorting()
-        {
-            if (CommumLine.IsEmpty() && PreferentialLine.IsEmpty())
-            {
-                Console.WriteLine("Nenhum paciente registrado ainda!");
-                Console.ReadKey();
-            }
-            else if (PreferentialLine.IsEmpty())
-            {
-                CommumLine.Show();
-                Console.ReadKey();
-                PreferentialLine.Count = 0;
-            }
-            else
-            {
-                if (PreferentialLine.Count < 2)
-                {
-                    
-                    Console.ReadKey();
-                    PreferentialLine.Count++;
-                }
-                else
-                {
-                    CommumLine.Show();
-                    Console.ReadKey();
-                    PreferentialLine.Count = 0;
-                }
-            }
-        }
-
-        public static void CreateReport(Pacient pacient)
-        {
-            Console.WriteLine(pacient);
-
-            Console.Write("Temperatura: ");
-            float temperature = float.Parse(Console.ReadLine());
-
-            Console.Write("Pressao: ");
-            int pressure = int.Parse(Console.ReadLine());
-
-            Console.Write("Saturacao: ");
-            int saturation = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Inicio dos Sintomas=> ");
+            Console.Write("Data de Nascimento=> ");
             Console.Write("Dia: ");
             int day = int.Parse(Console.ReadLine());
             Console.Write("Mes: ");
-            int month = int.Parse(Console.ReadLine());
+            int mounth = int.Parse(Console.ReadLine());
             Console.Write("Ano: ");
             int year = int.Parse(Console.ReadLine());
+            DateTime birthDate = new (year, mounth, day);
+            int age = DateTime.Now.Year - year;
 
-            Console.WriteLine("Comorbidades=> ");
-
-            int count = 0, stop = 0;
-            string[] comorb = new string[20];
-            while (stop == 0 && count < 20)
+            Pacient newPacient;
+            if (!isEmergency)
             {
-                Console.Write("Adicionar comorbidade: ");
-                comorb[count] = Console.ReadLine();
-                count++;
-                Console.WriteLine("Digite [1] para parar de adicionar.");
-                stop = int.Parse(Console.ReadLine());
+                newPacient = new (cpf, name, birthDate, age);
+                if (newPacient.IsPreferencial) Preferentials.Add(newPacient);
+
+                else Commons.Add(newPacient);
+            }
+            else
+            {
+                newPacient = new (cpf, name, birthDate, age, isEmergency);
+                Emergencies.Add(newPacient);
             }
 
-            pacient.Report = new Report(temperature, pressure, saturation, new DateTime(year, month, day), comorb);
+            Console.WriteLine($"Novo paciente cadastrado: {newPacient}");
+        }
 
-            Console.Write("Deseja arquivar o paciente? [0] sim [1] nao");
-            int archive = int.Parse(Console.ReadLine());
-            if (archive == 0)
+        public void Exams(Pacient pacient)
+        {
+            Console.WriteLine($"O paciente: {pacient.CPF}, {pacient.Name}");
+            Console.WriteLine("[1] Não esta com covid");
+            Console.WriteLine("[2] Tem a possibilidade de estar com covid");
+            int option = int.Parse(Console.ReadLine());
+
+            if (option == 1) ArchiveController.UploadToFile(pacient, ArchiveController.NoCovidPath);
+            else
             {
+                if (pacient.Report.Saturation > 90 || pacient.IsPreferencial || pacient.Report.Temperature > 37)
+                {
+                    Console.WriteLine("Parece que o paciente tem condições propicias a ser um caso emergencial!");
+                    Console.WriteLine("Temperatura do paciente: " + pacient.Report.Temperature);
+                    Console.WriteLine("Saturação do paciente: " + pacient.Report.Saturation);
+                    Console.WriteLine("Paciente é idoso: " + pacient.IsPreferencial);
+                }
+                Console.WriteLine("Verificar prioridades: ");
+                Console.WriteLine("[1] Paciente é assintomatico");
+                Console.WriteLine("[2] Paciente tem risco");
+                option = int.Parse(Console.ReadLine());
 
+                if (option == 1) ArchiveController.UploadToFile(pacient, ArchiveController.QuarentinePath);
+                else
+                {
+                    Console.WriteLine("Parece que é um caso grave!");
+                    if (BedsFlowControl.AllBedsOccupied)
+                    {
+                        Console.WriteLine("Todos os leitos ja estao ocupado, enviando paciente para a fila de espera de leitos.");
+                        Console.WriteLine("Enviando paciente para a fila de leitos de emergencia!");
+                        BedsFlowControl.WaitList.Add(pacient);
+                        ArchiveController.UploadToFile(pacient, ArchiveController.WaitingForBedPath);
+                        Console.WriteLine($"{pacient.CPF} esta agora na fila de espera!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Que bom! Temos leitos desocupados!");
+                        BedsFlowControl.Hospitalized.Add(pacient);
+                        ArchiveController.UploadToFile(pacient, ArchiveController.HospitalizedPath);
+                        Console.WriteLine($"{pacient.CPF} esta agora ocupando um lugar em um dos leitos!");
+                    }
+                }
+                ArchiveController.UploadToFile(pacient, ArchiveController.HospitalizedPath);
             }
         }
 
-        public static Pacient RegisterPacient(Pacient pacient, int cpf, string name, DateTime birthDate, int age)
+        public void Exams(Pacient pacient, bool isEmergency)
         {
-            pacient.CPF = cpf;
-            pacient.Name = name;
-            pacient.BirthDate = birthDate;
-            pacient.Age = age;
+            Console.WriteLine("Parece que o paciente tem condições propicias a ser um caso emergencial!");
+            Console.WriteLine("Temperatura do paciente: " + pacient.Report.Temperature);
+            Console.WriteLine("Saturação do paciente: " + pacient.Report.Saturation);
+            Console.WriteLine("Paciente é idoso: " + pacient.IsPreferencial);
+            Console.WriteLine("Parece que é um caso grave!");
 
-            return pacient;
+            if (BedsFlowControl.AllBedsOccupied)
+            {
+                Console.WriteLine("Todos os leitos ja estao ocupado, enviando paciente para a fila de espera de leitos.");
+                Console.WriteLine("Enviando paciente para a fila de leitos de emergencia!");
+                BedsFlowControl.WaitList.Add(pacient);
+                ArchiveController.UploadToFile(pacient, ArchiveController.WaitingForBedPath);
+                Console.WriteLine($"{pacient.CPF} esta agora na fila de espera!");
+            }
+            else
+            {
+                Console.WriteLine("Que bom! Temos leitos desocupados!");
+                BedsFlowControl.Hospitalized.Add(pacient);
+                ArchiveController.UploadToFile(pacient, ArchiveController.HospitalizedPath);
+                Console.WriteLine($"{pacient.CPF} esta agora ocupando um lugar em um dos leitos!");
+            }
+        }
+
+        public Pacient CallNextToAttend()
+        {
+            Pacient next = null;
+
+            if (Emergencies.Count == 0)
+            {
+                if (Commons.IsEmpty && Preferentials.IsEmpty)
+                {
+                    Console.WriteLine("\nNenhum registro ainda!\n");
+                }
+                else if (Preferentials.IsEmpty || PrefCount == 2)
+                {
+                    next = Commons.First();
+                    Commons.RemoveFirst();
+                    if (PrefCount == 2) PrefCount = 0;
+                }
+                else
+                {
+                    next = Preferentials.First();
+                    Preferentials.RemoveFirst();
+                    PrefCount++;
+                }
+            }
+            else
+            {
+                next = Emergencies.First();
+                Emergencies.RemoveAt(0);
+            }
+            return next;
+        }
+
+        public static Report CreateReport()
+        {
+            Console.WriteLine("==== ANAMNESE => ");
+            Console.Write("\tTemperatura: ");
+            float temperature = float.Parse(Console.ReadLine());
+
+            Console.Write("\tPressao: ");
+            string pressure = Console.ReadLine();
+
+            Console.Write("\tSaturacao: ");
+            int saturation = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Inicio dos Sintomas=> ");
+            Console.Write("\tDia: ");
+            int day = int.Parse(Console.ReadLine());
+            Console.Write("\tMes: ");
+            int month = int.Parse(Console.ReadLine());
+            Console.Write("\tAno: ");
+            int year = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("==== COVID => ");
+            Console.Write("\tComorbidades: ");
+            string comorb = Console.ReadLine();
+
+            return new Report(temperature, pressure, saturation, new DateTime(year, month, day), comorb);
         }
     }
 }
