@@ -1,6 +1,6 @@
 # SistemaControleFilasCovid
 
-<h1> Instrucoes de uso </h1>
+<h3> Instrucoes de uso </h3>
 
 - Menu:
   - Recepcao: No topo da tela será mostrado o proximo da fila e a baixo em sequencia todo o cadastro do paciente
@@ -14,4 +14,6 @@
             
   - Recepcao emergente: Na recepcao emergente voce consegue pular as etapas e passar um paciente que esta em risco de vida direto para a emergencia/leito depois de preencher todas as informacoes tanto de cadastro como de relatorio.
 
-Faltou: manipular corretamente os arquivos para pegar todos os dados salvos direto dos arquivos e manipular todos os dados direto dos arquivos
+<h3> Faltou </h3>
+
+Manipular corretamente os arquivos para pegar todos os dados salvos direto dos arquivos e manipular todos os dados direto dos arquivos
