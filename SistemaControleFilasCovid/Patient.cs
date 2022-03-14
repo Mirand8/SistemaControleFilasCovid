@@ -2,7 +2,7 @@
 
 namespace SistemaControleFilasCovid
 {
-    public class Pacient
+    public class Patient
     {
         public int CPF { get; set; }
         public string Name { get; set; }
@@ -11,9 +11,9 @@ namespace SistemaControleFilasCovid
         public bool IsPreferencial => Age > 59;
         public bool IsEmergency { get; set; }
         public Report Report { get; set; }
-        public Pacient Next { get; set; }
+        public Patient Next { get; set; }
 
-        public Pacient(int cpf, string name, DateTime birthDate,int age)
+        public Patient(int cpf, string name, DateTime birthDate,int age)
         {
             CPF = cpf;
             Name = name;
@@ -21,7 +21,7 @@ namespace SistemaControleFilasCovid
             Age = age;
         }
 
-        public Pacient(int cpf, string name, DateTime birthDate, int age, bool isEmergency)
+        public Patient(int cpf, string name, DateTime birthDate, int age, bool isEmergency)
         {
             CPF = cpf;
             Name = name;
@@ -30,7 +30,7 @@ namespace SistemaControleFilasCovid
             IsEmergency = isEmergency;
         }
 
-        public Pacient (int cpf, string name, DateTime birthDate, int age, Report report)
+        public Patient (int cpf, string name, DateTime birthDate, int age, Report report)
         {
             CPF = cpf;
             Name = name;

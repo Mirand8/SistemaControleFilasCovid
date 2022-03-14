@@ -11,7 +11,7 @@ namespace SistemaControleFilasCovid
         public int GenPassword { get; set; }
         public PreferencialList Preferentials { get; set; }
         public CommonList Commons { get; set; }
-        public List<Pacient> Emergencies { get; set; }
+        public List<Patient> Emergencies { get; set; }
         public int PrefCount { get; set; }
         public ArchiveController ArchiveController { get; set; }
         public BedsFlowControl BedsFlowControl { get; set; }
@@ -48,7 +48,7 @@ namespace SistemaControleFilasCovid
             DateTime birthDate = new (year, mounth, day);
             int age = DateTime.Now.Year - year;
 
-            Pacient newPacient;
+            Patient newPacient;
             if (!isEmergency)
             {
                 newPacient = new (cpf, name, birthDate, age);
@@ -65,7 +65,7 @@ namespace SistemaControleFilasCovid
             Console.WriteLine($"Novo paciente cadastrado: {newPacient}");
         }
 
-        public void Exams(Pacient pacient)
+        public void Exams(Patient pacient)
         {
             Console.WriteLine($"O paciente: {pacient.CPF}, {pacient.Name}");
             Console.WriteLine("[1] Não esta com covid");
@@ -111,7 +111,7 @@ namespace SistemaControleFilasCovid
             }
         }
 
-        public void Exams(Pacient pacient, bool isEmergency)
+        public void Exams(Patient pacient, bool isEmergency)
         {
             Console.WriteLine("Parece que o paciente tem condições propicias a ser um caso emergencial!");
             Console.WriteLine("Temperatura do paciente: " + pacient.Report.Temperature);
@@ -136,9 +136,9 @@ namespace SistemaControleFilasCovid
             }
         }
 
-        public Pacient CallNextToAttend()
+        public Patient CallNextToAttend()
         {
-            Pacient next = null;
+            Patient next = null;
 
             if (Emergencies.Count == 0)
             {

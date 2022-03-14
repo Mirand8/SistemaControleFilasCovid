@@ -12,7 +12,7 @@ namespace SistemaControleFilasCovid
         public const string HospitalizedPath = @"C:\Users\Matheus Miranda\Desktop\HospitalCovidario\Covid\Internacoes\EmLeitos.txt";
         public const string WaitingForBedPath = @"C:\Users\Matheus Miranda\Desktop\HospitalCovidario\Covid\Internacoes\EmFila.txt";
 
-        public static void UploadToFile(Pacient pacient, string filePath)
+        public static void UploadToFile(Patient pacient, string filePath)
         {
             try
             {

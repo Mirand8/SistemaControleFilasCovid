@@ -24,7 +24,7 @@ namespace SistemaControleFilasCovid
                         break;
 
                     case 2:
-                        Pacient next = pacientFlowControl.CallNextToAttend();
+                        Patient next = pacientFlowControl.CallNextToAttend();
                         if (next == null)
                         {
                             Console.ReadKey();
@@ -157,7 +157,7 @@ namespace SistemaControleFilasCovid
                         Console.WriteLine("==== AREA DE EMERGENCIA ====");
                         pacientFlowControl.Register(true);
 
-                        Pacient emergencyP = pacientFlowControl.CallNextToAttend();
+                        Patient emergencyP = pacientFlowControl.CallNextToAttend();
                         if (emergencyP == null)
                         {
                             Console.ReadKey();
@@ -183,7 +183,7 @@ namespace SistemaControleFilasCovid
         {
             Console.WriteLine("[1] - RECEPCAO");
             Console.WriteLine("[2] - TRIAGEM");
-            Console.WriteLine("[3] - GERENCIAR EMERGENCIAS");
+            Console.WriteLine("[3] - GERENCIAR CASOS");
             Console.WriteLine("[4] - RECEPCAO EMERGENTE");
             Console.WriteLine("[0] - ENCERRAR");
             Console.Write("Opcao: ");

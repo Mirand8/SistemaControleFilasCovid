@@ -7,8 +7,8 @@ namespace SistemaControleFilasCovid
     public class BedsFlowControl
     {
         public int BedsCount { get; set; }
-        public List<Pacient> WaitList { get; set; }
-        public List<Pacient> Hospitalized { get; set; }
+        public List<Patient> WaitList { get; set; }
+        public List<Patient> Hospitalized { get; set; }
         public bool AllBedsOccupied => Hospitalized.Count == BedsCount; 
 
         public BedsFlowControl()

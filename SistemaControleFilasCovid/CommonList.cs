@@ -4,8 +4,8 @@ namespace SistemaControleFilasCovid
 {
     public class CommonList
     {
-        public Pacient Head { get; set; }
-        public Pacient Tail { get; set; }
+        public Patient Head { get; set; }
+        public Patient Tail { get; set; }
         public int Count { get; set; }
         public bool IsEmpty => Count == 0;
 
@@ -16,17 +16,17 @@ namespace SistemaControleFilasCovid
             Count = 0;
         }
 
-        public Pacient First()
+        public Patient First()
         {
             if (!IsEmpty)
             {
-                Pacient first = Head;
+                Patient first = Head;
                 return first;
             }
             else return null;
         }
 
-        public void Add(Pacient newPacient)
+        public void Add(Patient newPacient)
         {
             if (IsEmpty) Head = Tail = newPacient;
 
@@ -51,7 +51,7 @@ namespace SistemaControleFilasCovid
             Count--;
         }
 
-        public void Remove(Pacient pacient)
+        public void Remove(Patient pacient)
         {
 
         }
@@ -62,7 +62,7 @@ namespace SistemaControleFilasCovid
             Console.Write("[ ");
             if (!IsEmpty)
             {
-                Pacient aux = Head;
+                Patient aux = Head;
                 do
                 {
                     if (aux.Next == null)
